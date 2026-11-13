@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120e0f">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Admin">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Panel · Maison Noir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#120e0f; --ink2:#1c1618; --cream:#f5ede3; --cream2:#e9dccb;
+  --gold:#c9a35b; --gold-d:#7a5f23; --rose:#b76e79;
+  --muted:#b3a79f; --muted-dk:#6d605a; --line:rgba(246,239,226,.18);
+  --ease:cubic-bezier(.22,.8,.24,1);
+  --f-disp:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --f-body:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--f-body);font-size:16px;background:var(--ink);color:var(--cream);line-height:1.5;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;min-height:100vh;min-height:100dvh}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{width:min(1000px,100% - 32px);margin-inline:auto}
+.disp{font-family:var(--f-disp);font-weight:600;letter-spacing:-.01em;line-height:1;text-wrap:balance;margin:0}
+.g{color:var(--gold)}
+
+header.top{position:sticky;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:rgba(27,29,26,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;width:min(1000px,100% - 32px);margin-inline:auto}
+.logo{font-family:var(--f-disp);font-weight:600;font-size:1.35rem;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px}
+.logo .lg{font-weight:900}.logo .lg span{color:var(--gold)}
+.logo small{font-family:var(--f-body);font-stretch:100%;font-size:.7rem;letter-spacing:.25em;color:var(--muted);font-weight:600;text-transform:uppercase}
+.pill{border:1px solid var(--cream);background:transparent;color:var(--cream);border-radius:999px;height:42px;padding:0 20px;font-weight:700;transition:.3s}
+.pill:hover{background:var(--cream);color:var(--ink)}
+
+.btn{position:relative;overflow:hidden;display:inline-block;height:54px;border-radius:999px;border:0;background:var(--cream);color:var(--ink);font-weight:700;font-size:.95rem;vertical-align:middle}
+.btn span{display:flex;align-items:center;justify-content:center;height:54px;padding:0 32px;transition:transform .4s var(--ease);white-space:nowrap}
+.btn span+span{position:absolute;inset:0;transform:translateY(100%);background:var(--gold)}
+.btn:hover span:first-child{transform:translateY(-100%)}.btn:hover span+span{transform:none}
+.btn.dark{background:var(--ink);color:var(--cream)}.btn.dark span+span{background:var(--rose);color:var(--ink)}
+.btn.block{display:block;width:100%}
+.btn:disabled{opacity:.5;pointer-events:none}
+
+/* Login */
+#login{padding-block:80px}
+#login h1{font-size:clamp(3rem,13vw,7rem)}
+#login p{color:var(--muted);max-width:30em;margin:22px 0 28px}
+#lf{display:grid;gap:12px;max-width:420px}
+.in,#lf input[type=email],#lf input[type=password]{width:100%;padding:15px 18px;border:1.5px solid var(--line);border-radius:14px;background:var(--ink2);color:var(--cream);font:inherit;font-size:16px}
+#lf input:focus{border-color:var(--gold);outline:0}
+.rec{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.9rem}
+.rec input{width:20px;height:20px;accent-color:var(--gold)}
+.err{color:#ff9a8a;min-height:1.4em;margin:0!important}
+.hint{font-size:.85rem}
+
+/* Pestañas */
+.tabs{display:flex;gap:8px;padding-block:22px 6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;height:44px;padding:0 22px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--muted);font-weight:700;transition:.25s}
+.tabs button.on{background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:26px 0 18px;flex-wrap:wrap}
+.head h2{font-size:clamp(2rem,7vw,3.6rem)}
+.head h2 .o{font-style:italic;color:var(--cream)}
+.sum{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.tools .in{flex:1;min-width:200px;border-radius:99px}
+.add{height:50px;border-radius:99px;border:0;background:var(--gold);color:var(--ink);font-weight:800;padding:0 24px;transition:transform .3s var(--ease)}
+.add:hover{transform:scale(1.04)}
+
+/* Tarjetas (mismo lenguaje que el catálogo: crema + color) */
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));gap:16px;padding-bottom:90px}
+.pc{background:var(--cream);color:var(--ink);border-radius:22px;padding:14px;display:grid;grid-template-columns:72px 1fr;gap:12px 14px;align-content:start}
+.ctl{grid-column:1/-1;display:grid;gap:10px}
+.pc.off{opacity:.6}
+.th{width:72px;height:72px;border-radius:16px;background:var(--c,#e6d3b3);display:grid;place-items:center;overflow:hidden}
+.th img{width:100%;height:100%;object-fit:cover}
+.th b{font-family:var(--f-disp);font-weight:600;font-size:2rem;opacity:.5}
+.bd{min-width:0;display:flex;flex-direction:column;gap:8px}
+.bd strong{font-family:var(--f-disp);font-weight:600;font-size:1rem;line-height:1.1;overflow-wrap:anywhere}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.8rem;color:var(--muted-dk)}
+.tag{background:var(--ink);color:var(--cream);font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;border-radius:99px}
+.tag.out{background:#9b2c2c}.tag.low{background:var(--rose)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.money{display:flex;align-items:center;gap:6px;border:1.5px solid var(--ink);border-radius:12px;padding:0 12px;height:44px;flex:1;min-width:120px}
+.money i{font-style:normal;font-weight:700}
+.money input{border:0;background:transparent;font:inherit;font-weight:700;font-size:16px;width:100%;color:var(--ink);min-width:0}
+.money input:focus{outline:0}
+.stp{display:flex;align-items:center;border:1.5px solid var(--ink);border-radius:99px;height:44px}
+.stp button{width:44px;height:100%;border:0;background:transparent;font-size:1.3rem;color:var(--ink);border-radius:99px}
+.stp button:hover{background:var(--ink);color:var(--cream)}
+.stp input{width:48px;border:0;background:transparent;text-align:center;font:inherit;font-weight:700;font-size:16px;color:var(--ink);-moz-appearance:textfield}
+.stp input:focus{outline:0}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none}
+.ln{height:40px;padding:0 18px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font-weight:700;font-size:.85rem;transition:.25s;display:inline-flex;align-items:center}
+.ln:hover{background:var(--ink);color:var(--cream)}
+.ln.red{border-color:#9b2c2c;color:#9b2c2c}.ln.red:hover{background:#9b2c2c;color:#fff}
+.empty{padding:50px 0;color:var(--muted);text-align:center;grid-column:1/-1}
+.nc .bd p{margin:0;font-size:.88rem;color:var(--muted-dk)}
+
+/* Tienda */
+#tf{display:grid;gap:14px;max-width:520px;padding-bottom:90px}
+.fld{display:grid;gap:6px}
+.fld>span{font-weight:700;font-size:.85rem}
+.fld input,.fld textarea{width:100%;padding:13px 16px;border:1.5px solid var(--ink);border-radius:12px;background:transparent;color:var(--ink);font:inherit;font-size:16px;-webkit-appearance:none;appearance:none}
+.fld textarea{resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:0;border-color:var(--gold-d);box-shadow:0 0 0 3px rgba(122,95,35,.2)}
+.fld small{color:var(--muted-dk)}
+#tf .fld>span{color:var(--cream)}
+#tf .fld input{border-color:var(--line);background:var(--ink2);color:var(--cream)}
+#tf .fld small{color:var(--muted)}
+
+/* Editor */
+dialog#ed{width:100%;max-width:560px;max-height:94dvh;max-height:94vh;margin:auto auto 0;border:0;border-radius:26px 26px 0 0;background:var(--cream);color:var(--ink);padding:0;overflow:hidden}
+dialog#ed[open]{display:flex;flex-direction:column;animation:up .45s var(--ease)}
+@keyframes up{from{transform:translateY(100%)}}
+dialog#ed::backdrop{background:rgba(0,0,0,.6)}
+@media(min-width:700px){dialog#ed{margin:auto;border-radius:26px}}
+.eh{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1.5px solid var(--ink)}
+.eh h3{margin:0;font-family:var(--f-disp);font-weight:600;font-size:1.4rem}
+.eh button{background:none;border:0;font-size:2rem;line-height:1;color:var(--ink)}
+#ef{padding:20px 24px;overflow:auto;display:grid;gap:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fprev{height:150px;border-radius:16px;background:var(--cream2);display:grid;place-items:center;color:var(--muted-dk);overflow:hidden}
+.fprev img{width:100%;height:100%;object-fit:contain}
+.up{position:relative;justify-content:center;width:100%}
+.up input{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:38px;height:38px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.sw button.on{border-color:var(--ink);transform:scale(1.12)}
+.sw button.auto{width:auto;padding:0 14px;border-radius:99px;background:transparent;border:1.5px solid var(--ink);font-weight:700;font-size:.8rem;color:var(--ink)}
+.sw button.auto.on{background:var(--ink);color:var(--cream)}
+.chk{display:flex;gap:10px;align-items:center;font-weight:600}
+.chk input{width:22px;height:22px;accent-color:var(--gold-d)}
+.ea{display:flex;gap:10px;padding:16px 24px calc(18px + env(safe-area-inset-bottom,0px));border-top:1.5px solid var(--ink)}
+.ea .btn{flex:1}
+.ea #esave{background:var(--gold)}.ea #esave span+span{background:var(--ink);color:var(--cream)}
+
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160px);background:var(--cream);color:var(--ink);padding:14px 24px;border-radius:99px;font-weight:700;z-index:300;transition:transform .5s var(--ease);max-width:calc(100% - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.toast.on{transform:translate(-50%,0)}.toast.bad{background:#9b2c2c;color:#fff}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.logo .lg span{font-style:italic}.logo{font-size:1.7rem}.btn,.pill{letter-spacing:.05em}.bd strong{font-size:1.25rem;line-height:1.05}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="bar">
+  <a class="logo" href="#"><b class="lg">Maison <span>Noir</span></b><small>Panel</small></a>
+  <button class="pill" id="salir" hidden>Salir</button>
+</div></header>
+
+<main class="wrap">
+  <section id="login">
+    <h1 class="disp">Panel<br><span class="g">del dueño</span></h1>
+    <p>Ingresá con tu email y contraseña para manejar productos, stock, fotos y novedades.</p>
+    <form id="lf" novalidate>
+      <input type="email" id="email" placeholder="Email" autocomplete="username" inputmode="email">
+      <input type="password" id="pass" placeholder="Contraseña" autocomplete="current-password">
+      <label class="rec"><input type="checkbox" id="rec"> Mantener sesión en este teléfono</label>
+      <button class="btn" id="lbtn" type="submit"><span>Ingresar</span><span>Ingresar</span></button>
+      <p class="err" id="lerr" role="alert"></p>
+      <p class="hint" id="demohint" hidden>Modo demo: email libre y contraseña <b>demo</b>. Los cambios se ven en index.html de este mismo navegador.</p>
+    </form>
+  </section>
+
+  <section id="app" hidden>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="on" data-tab="productos">Productos</button>
+      <button data-tab="novedades">Novedades</button>
+      <button data-tab="tienda">Tienda</button>
+    </nav>
+
+    <div id="v-productos">
+      <div class="head"><div><h2 class="disp">Tus <span class="o">productos</span></h2><p class="sum" id="psum"></p></div></div>
+      <div class="tools"><input class="in" id="q" type="search" placeholder="Buscar producto…"><button class="add" data-new="productos">+ Nuevo</button></div>
+      <div class="list" id="plist"></div>
+    </div>
+
+    <div id="v-novedades" hidden>
+      <div class="head"><div><h2 class="disp"><span class="o">Nove</span>dades</h2><p class="sum">Aparecen en la sección “Nuevo!” del catálogo (se muestran las 3 últimas).</p></div><button class="add" data-new="novedades">+ Nueva</button></div>
+      <div class="list" id="nlist"></div>
+    </div>
+
+    <div id="v-tienda" hidden>
+      <div class="head"><div><h2 class="disp">Datos de la <span class="o">tienda</span></h2><p class="sum">Estos datos los usa el catálogo para el logo y los botones de contacto del carrito.</p></div></div>
+      <form id="tf" novalidate>
+        <label class="fld"><span>Nombre de la tienda</span><input name="negocio" autocomplete="off" placeholder="Maison Noir"><small>Si lleva dos palabras (Maison Noir) la última se resalta en dorado.</small></label>
+        <label class="fld"><span>Frase del encabezado</span><input name="lema" autocomplete="off" placeholder="PERFUMERÍA DE AUTOR"></label>
+        <label class="fld"><span>WhatsApp (con código de país, solo números)</span><input name="whatsapp" inputmode="tel" autocomplete="off" placeholder="5492231234567"></label>
+        <label class="fld"><span>Instagram (usuario)</span><input name="instagram" autocomplete="off" autocapitalize="none" placeholder="mitienda"></label>
+        <button class="btn" id="tbtn" type="submit"><span>Guardar cambios</span><span>Guardar cambios</span></button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<dialog id="ed" aria-labelledby="etitle">
+  <div class="eh"><h3 id="etitle"></h3><button id="ecerrar" type="button" aria-label="Cerrar">×</button></div>
+  <form id="ef" novalidate></form>
+  <div class="ea"><button class="btn red dark" id="edel" type="button" hidden><span>Eliminar</span><span>Eliminar</span></button><button class="btn" id="esave" type="button"><span>Guardar</span><span>Guardar</span></button></div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================
+   CONFIGURACIÓN  ← EDITÁ ESTO (mismos datos que index.html)
+   ===================================================== */
+const CONFIG = {
+  SUPABASE_URL: "",      // Project URL. Vacío = modo demo (contraseña: demo)
+  SUPABASE_KEY: "",      // clave "anon" / "publishable"
+  BUCKET: "perfumes",   // bucket de Storage para las fotos
+  MONEDA: "$"
+};
+const DEMO_P = [
+  {id:"1",nombre:"Rosa Nocturna",descripcion:"Eau de parfum 100 ml. Rosa de Damasco, vainilla y almizcle.",precio:89000,stock:8,categoria:"Femeninos"},
+  {id:"2",nombre:"Flor de Jazmín",descripcion:"Eau de parfum 75 ml. Jazmín, azahar y notas de pera.",precio:76000,stock:2,categoria:"Femeninos"},
+  {id:"3",nombre:"Ámbar Dulce",descripcion:"Eau de parfum 100 ml. Ámbar, caramelo y haba tonka.",precio:82000,stock:6,categoria:"Femeninos"},
+  {id:"4",nombre:"Velvet Orchid",descripcion:"Eau de parfum 50 ml. Orquídea negra, ciruela y pachulí.",precio:98000,stock:0,categoria:"Femeninos"},
+  {id:"5",nombre:"Peonía Blanca",descripcion:"Eau de toilette 100 ml. Peonía, lichi y cedro suave.",precio:64000,stock:10,categoria:"Femeninos"},
+  {id:"6",nombre:"Oud Imperial",descripcion:"Parfum 100 ml. Oud, pimienta rosa y cuero.",precio:125000,stock:4,categoria:"Masculinos"},
+  {id:"7",nombre:"Cuero & Tabaco",descripcion:"Eau de parfum 100 ml. Tabaco rubio, cuero y vainilla.",precio:92000,stock:7,categoria:"Masculinos"},
+  {id:"8",nombre:"Madera Negra",descripcion:"Eau de parfum 100 ml. Cedro, vetiver y bergamota.",precio:85000,stock:3,categoria:"Masculinos"},
+  {id:"9",nombre:"Aqua Sport",descripcion:"Eau de toilette 100 ml. Cítricos, menta y notas marinas.",precio:58000,stock:15,categoria:"Masculinos"},
+  {id:"10",nombre:"Sándalo Cálido",descripcion:"Extrait 50 ml. Sándalo, incienso suave y cardamomo.",precio:110000,stock:5,categoria:"Unisex"},
+  {id:"11",nombre:"Bergamota Fresca",descripcion:"Eau de cologne 100 ml. Bergamota, té verde y musgo blanco.",precio:62000,stock:9,categoria:"Unisex"},
+  {id:"12",nombre:"Incienso Real",descripcion:"Extrait 50 ml. Incienso, mirra y resina de ámbar.",precio:118000,stock:2,categoria:"Unisex"},
+  {id:"13",nombre:"Decant 10 ml a elección",descripcion:"Probá cualquier fragancia de la tienda en formato viaje.",precio:14000,stock:20,categoria:"Decants y sets"},
+  {id:"14",nombre:"Set de descubrimiento",descripcion:"Cinco decants de 5 ml en estuche para elegir tu firma.",precio:32000,stock:12,categoria:"Decants y sets"},
+  {id:"15",nombre:"Estuche regalo",descripcion:"Perfume 50 ml, crema corporal y envoltorio de regalo.",precio:105000,stock:0,categoria:"Decants y sets"}
+];
+const DEMO_N = [
+  {etiqueta:"Lanzamiento",titulo:"Colección Oud: tres fragancias de nicho",texto:"Maderas profundas y resinas, con proyección y fijación de todo el día.",arte:"frasco unisex nicho"},
+  {etiqueta:"Tip",titulo:"Cómo hacer que tu perfume dure más",texto:"Aplicalo sobre piel hidratada, en muñecas y cuello, sin frotar.",arte:"frasco femenino"},
+  {etiqueta:"Promo",titulo:"Sets de regalo con envío gratis",texto:"En todos los estuches y sets de descubrimiento, durante el mes.",arte:"set de regalo"}
+];
+const PALETA = ["#ecd9c6","#e8c9c4","#d9d2e6","#d6dfd3","#efe0b8","#cfd8e3","#f0cdbb","#e2d3df"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const demo=!CONFIG.SUPABASE_URL, base=(CONFIG.SUPABASE_URL||"").replace(/\/$/,""), KEY=CONFIG.SUPABASE_KEY;
+
+function toast(m,bad){const t=$("#toast");t.textContent=m;t.classList.toggle("bad",!!bad);t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2400);}
+
+/* ---------- Sesión (Supabase Auth) ---------- */
+const SES="maison_admin";let ses=null;
+const leerSes=()=>{try{return JSON.parse(localStorage.getItem(SES)||sessionStorage.getItem(SES));}catch(e){return null;}};
+function guardarSes(s,rec){ses=s;try{localStorage.removeItem(SES);sessionStorage.removeItem(SES);if(s)(rec?localStorage:sessionStorage).setItem(SES,JSON.stringify(s));}catch(e){}}
+async function tokenReq(body,grant){
+  const r=await fetch(`${base}/auth/v1/token?grant_type=${grant}`,{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({}));
+  if(!j.access_token)throw new Error(j.error_description||j.msg||"Email o contraseña incorrectos");
+  return {access_token:j.access_token,refresh_token:j.refresh_token,exp:Date.now()+(j.expires_in-60)*1000};
+}
+async function jwt(){
+  if(!ses)throw new Error("Sesión vencida, volvé a ingresar");
+  if(Date.now()<ses.exp)return ses.access_token;
+  const rec=!!localStorage.getItem(SES);const s=await tokenReq({refresh_token:ses.refresh_token},"refresh_token");guardarSes(s,rec);return s.access_token;
+}
+async function rest(method,path,body,prefer){
+  const t=await jwt();
+  const r=await fetch(`${base}/rest/v1/${path}`,{method,headers:{apikey:KEY,Authorization:"Bearer "+t,"Content-Type":"application/json",Prefer:prefer||"return=minimal"},body:body?JSON.stringify(body):undefined});
+  if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||"Error "+r.status);}
+  return r;
+}
+
+/* ---------- Datos (Supabase o demo en este navegador) ---------- */
+const DK={productos:"maison_demo_p",novedades:"maison_demo_n"};
+const demoGet=t=>{try{const d=JSON.parse(localStorage.getItem(DK[t]));if(Array.isArray(d))return d;}catch(e){}return t==="productos"?DEMO_P:DEMO_N;};
+const demoSet=(t,d)=>localStorage.setItem(DK[t],JSON.stringify(d));
+const TBL=t=>({productos:"maison_perfumes",novedades:"maison_novedades",ajustes:"maison_ajustes"})[t]||t; /* nombres internos del panel -> tablas de Supabase */
+const Db={
+  async list(t){
+    if(demo)return demoGet(t).map((x,i)=>({activo:true,...x,id:String(x.id??"n"+i)}));
+    const o=t==="productos"?"categoria.asc,nombre.asc":"creado.desc";
+    return (await (await rest("GET",`${TBL(t)}?select=*&order=${o}`)).json()).map(x=>({...x,id:String(x.id)}));
+  },
+  async add(t,o){if(demo){demoSet(t,[...await this.list(t),{id:Math.random().toString(36).slice(2,10),...o}]);return;}await rest("POST",TBL(t),o);},
+  async upd(t,id,o){if(demo){demoSet(t,(await this.list(t)).map(x=>x.id===id?{...x,...o}:x));return;}await rest("PATCH",`${TBL(t)}?id=eq.${encodeURIComponent(id)}`,o);},
+  async del(t,id){if(demo){demoSet(t,(await this.list(t)).filter(x=>x.id!==id));return;}await rest("DELETE",`${TBL(t)}?id=eq.${encodeURIComponent(id)}`);},
+  async ajustes(){if(demo){try{return JSON.parse(localStorage.getItem("maison_demo_a"))||{};}catch(e){return{};}}const r=await (await rest("GET","maison_ajustes?select=*&id=eq.1")).json();return r[0]||{};},
+  async setAjustes(o){if(demo){localStorage.setItem("maison_demo_a",JSON.stringify(o));return;}await rest("POST","maison_ajustes",{id:1,...o},"resolution=merge-duplicates,return=minimal");}
+};
+function achicar(file){
+  return new Promise((ok,no)=>{
+    const img=new Image(),u=URL.createObjectURL(file);
+    img.onload=()=>{const k=Math.min(1,1200/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?ok(b):no(new Error("No se pudo procesar la foto")),"image/jpeg",.85);};
+    img.onerror=()=>no(new Error("Ese archivo no es una imagen válida"));img.src=u;
+  });
+}
+async function subirFoto(file){
+  const blob=await achicar(file);
+  if(demo)return new Promise(ok=>{const r=new FileReader();r.onload=()=>ok(r.result);r.readAsDataURL(blob);});
+  const nombre=Date.now().toString(36)+Math.random().toString(36).slice(2,7)+".jpg",t=await jwt();
+  const r=await fetch(`${base}/storage/v1/object/${CONFIG.BUCKET}/${nombre}`,{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+t,"Content-Type":"image/jpeg","Cache-Control":"max-age=31536000"},body:blob});
+  if(!r.ok)throw new Error("No se pudo subir la foto ("+r.status+")");
+  return `${base}/storage/v1/object/public/${CONFIG.BUCKET}/${nombre}`;
+}
+
+/* ---------- Estado y render ---------- */
+const state={productos:[],novedades:[]};
+const fmt=n=>CONFIG.MONEDA+Number(n||0).toLocaleString("es-AR");
+const stTag=p=>p.stock<=0?'<span class="tag out">Sin stock</span>':p.stock<=3?`<span class="tag low">Últimas ${p.stock}</span>`:'<span class="tag">Disponible</span>';
+function cardP(p){
+  return `<article class="pc ${p.activo===false?"off":""}" data-id="${esc(p.id)}">
+    <div class="th" style="--c:${esc(p.color||"#e6d3b3")}">${p.imagen?`<img src="${esc(p.imagen)}" alt="" loading="lazy">`:`<b>${esc((p.nombre||"?")[0])}</b>`}</div>
+    <div class="bd"><strong>${esc(p.nombre)}</strong>
+      <div class="meta">${stTag(p)}<span>${esc(p.categoria||"Sin categoría")}${p.activo===false?" · Oculto":""}</span></div>
+      </div><div class="ctl"><div class="row"><label class="money"><i>${esc(CONFIG.MONEDA)}</i><input type="number" inputmode="numeric" min="0" value="${p.precio}" data-a="precio" aria-label="Precio"></label>
+        <div class="stp"><button data-a="menos" aria-label="Restar uno">−</button><input type="number" inputmode="numeric" min="0" value="${p.stock}" data-a="stock" aria-label="Stock"><button data-a="mas" aria-label="Sumar uno">+</button></div></div>
+      <div class="row"><button class="ln" data-a="agotar">Agotar</button><button class="ln" data-a="editar">Editar</button></div></div></article>`;
+}
+function cardN(n){
+  return `<article class="pc nc ${n.activo===false?"off":""}" data-id="${esc(n.id)}">
+    <div class="th">${n.imagen?`<img src="${esc(n.imagen)}" alt="" loading="lazy">`:`<b>${esc((n.titulo||"?")[0])}</b>`}</div>
+    <div class="bd"><strong>${esc(n.titulo)}</strong><div class="meta"><span class="tag">${esc(n.etiqueta||"Novedad")}</span>${n.activo===false?"<span>Oculta</span>":""}</div>
+      <p>${esc((n.texto||"").slice(0,90))}</p><div class="row"><button class="ln" data-a="editar">Editar</button></div></div></article>`;
+}
+function renderP(){
+  const q=$("#q").value.trim().toLowerCase(),L=state.productos;
+  const f=L.filter(p=>!q||(p.nombre+" "+(p.categoria||"")).toLowerCase().includes(q));
+  $("#plist").innerHTML=f.length?f.map(cardP).join(""):'<div class="empty">No hay productos para mostrar.</div>';
+  const ag=L.filter(p=>p.stock<=0).length,oc=L.filter(p=>p.activo===false).length;
+  $("#psum").textContent=`${L.length} productos · ${ag} agotados`+(oc?` · ${oc} ocultos`:"");
+}
+function renderN(){const L=state.novedades;$("#nlist").innerHTML=L.length?L.map(cardN).join(""):'<div class="empty">Todavía no hay novedades.</div>';}
+async function cargar(){
+  try{[state.productos,state.novedades]=await Promise.all([Db.list("productos"),Db.list("novedades")]);
+    state.productos=state.productos.map(p=>({...p,precio:Number(p.precio)||0,stock:Number(p.stock)||0}));
+    if(demo)state.productos.sort((a,b)=>(a.categoria||"").localeCompare(b.categoria||"")||a.nombre.localeCompare(b.nombre));
+  }catch(e){toast(e.message||"No se pudo cargar",true);}
+  renderP();renderN();
+}
+async function cambiar(p,campos){
+  Object.assign(p,campos);
+  const el=$(`#plist [data-id="${CSS.escape(p.id)}"]`);if(el)el.outerHTML=cardP(p);
+  const sum=state.productos;$("#psum").textContent=`${sum.length} productos · ${sum.filter(x=>x.stock<=0).length} agotados`+(sum.some(x=>x.activo===false)?` · ${sum.filter(x=>x.activo===false).length} ocultos`:"");
+  try{await Db.upd("productos",p.id,campos);}catch(e){toast(e.message,true);cargar();}
+}
+$("#plist").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-a]");if(!b)return;
+  const p=state.productos.find(x=>x.id===b.closest(".pc").dataset.id);if(!p)return;
+  const a=b.dataset.a;
+  if(a==="mas")cambiar(p,{stock:p.stock+1});
+  else if(a==="menos")cambiar(p,{stock:Math.max(0,p.stock-1)});
+  else if(a==="agotar")cambiar(p,{stock:0});
+  else if(a==="editar")abrirEd("productos",p);
+});
+$("#plist").addEventListener("change",e=>{
+  const i=e.target.closest("input[data-a]");if(!i)return;
+  const p=state.productos.find(x=>x.id===i.closest(".pc").dataset.id);if(!p)return;
+  const v=Math.max(0,i.dataset.a==="stock"?Math.round(Number(i.value)||0):Number(i.value)||0);
+  cambiar(p,{[i.dataset.a]:v});
+});
+$("#nlist").addEventListener("click",e=>{
+  const b=e.target.closest('button[data-a="editar"]');if(!b)return;
+  abrirEd("novedades",state.novedades.find(x=>x.id===b.closest(".pc").dataset.id));
+});
+$("#q").addEventListener("input",renderP);
+document.addEventListener("click",e=>{const n=e.target.closest("[data-new]");if(n)abrirEd(n.dataset.new,null);});
+
+/* ---------- Editor ---------- */
+const SCHEMA={
+  productos:[{k:"nombre",l:"Nombre",t:"text",req:1},{k:"categoria",l:"Categoría (Femeninos, Masculinos…)",t:"text",list:1},
+    {k:"precio",l:"Precio",t:"number",half:1},{k:"stock",l:"Stock",t:"number",half:1},{k:"descripcion",l:"Descripción",t:"area"},
+    {k:"imagen",t:"foto"},{k:"color",t:"color"},{k:"activo",l:"Visible en la tienda",t:"check"}],
+  novedades:[{k:"etiqueta",l:"Etiqueta (Promo, Tip, Lanzamiento…)",t:"text"},{k:"titulo",l:"Título",t:"text",req:1},{k:"texto",l:"Texto",t:"area"},
+    {k:"imagen",t:"foto"},{k:"activo",l:"Visible en la tienda",t:"check"}]
+};
+let ctx=null,colorSel="";
+function campo(f,v){
+  const id="f_"+f.k;
+  if(f.t==="check")return `<label class="chk"><input type="checkbox" id="${id}" ${v!==false?"checked":""}> ${f.l}</label>`;
+  if(f.t==="area")return `<label class="fld"><span>${f.l}</span><textarea id="${id}" rows="3">${esc(v)}</textarea></label>`;
+  if(f.t==="foto")return `<div class="fld"><span>Foto</span><div class="fprev" id="fprev">${v?`<img src="${esc(v)}" alt="">`:"Sin foto"}</div>
+    <label class="ln up" id="fbtn"><span id="ftxt">Subir foto desde el teléfono</span><input type="file" id="ffile" accept="image/*"></label>
+    <input id="${id}" value="${esc(v)}" placeholder="…o pegá el link de una foto" inputmode="url" autocapitalize="none"></div>`;
+  if(f.t==="color")return `<div class="fld"><span>Color de la tarjeta</span><div class="sw" id="sw"><button type="button" class="auto" data-c="">Automático</button>${PALETA.map(c=>`<button type="button" data-c="${c}" style="background:${c}" aria-label="Color ${c}"></button>`).join("")}</div></div>`;
+  return `<label class="fld"><span>${f.l}</span><input id="${id}" type="${f.t}" ${f.t==="number"?'inputmode="numeric" min="0"':""} value="${esc(v)}" autocomplete="off" ${f.list?'list="cats"':""}></label>`;
+}
+function abrirEd(tabla,obj){
+  ctx={tabla,obj};colorSel=obj?.color||"";
+  const nuevo=!obj,d=obj||(tabla==="productos"?{precio:0,stock:1,activo:true}:{activo:true});
+  $("#etitle").textContent=(nuevo?"Nuevo ":"Editar ")+(tabla==="productos"?"producto":"novedad");
+  const cats=[...new Set(state.productos.map(p=>p.categoria).filter(Boolean))];
+  let html=SCHEMA[tabla].map(f=>campo(f,d[f.k])).join("");
+  html=html.replace(/(<label class="fld"><span>Precio<\/span>.*?<\/label>)(<label class="fld"><span>Stock<\/span>.*?<\/label>)/s,'<div class="two">$1$2</div>');
+  $("#ef").innerHTML=html+(tabla==="productos"?`<datalist id="cats">${cats.map(c=>`<option value="${esc(c)}">`).join("")}</datalist>`:"");
+  marcarColor();
+  $("#edel").hidden=nuevo;
+  $("#ed").showModal();
+}
+function marcarColor(){document.querySelectorAll("#sw button").forEach(b=>b.classList.toggle("on",b.dataset.c===colorSel));}
+$("#ef").addEventListener("click",e=>{const b=e.target.closest("#sw button");if(b){colorSel=b.dataset.c;marcarColor();}});
+$("#ef").addEventListener("input",e=>{if(e.target.id==="f_imagen"){const v=e.target.value.trim();$("#fprev").innerHTML=v?`<img src="${esc(v)}" alt="">`:"Sin foto";}});
+$("#ef").addEventListener("change",async e=>{
+  if(e.target.id!=="ffile")return;
+  const f=e.target.files[0];if(!f)return;
+  $("#ftxt").textContent="Subiendo…";
+  try{const url=await subirFoto(f);$("#f_imagen").value=url;$("#fprev").innerHTML=`<img src="${esc(url)}" alt="">`;toast("Foto cargada. Tocá Guardar para aplicarla");}
+  catch(err){toast(err.message,true);}
+  $("#ftxt").textContent="Subir foto desde el teléfono";e.target.value="";
+});
+$("#ecerrar").onclick=()=>$("#ed").close();
+$("#ed").addEventListener("click",e=>{if(e.target===$("#ed"))$("#ed").close();});
+$("#esave").onclick=async()=>{
+  const {tabla,obj}=ctx,o={};
+  for(const f of SCHEMA[tabla]){
+    if(f.t==="check")o[f.k]=$("#f_"+f.k).checked;
+    else if(f.t==="color")o[f.k]=colorSel;
+    else{let v=$("#f_"+f.k).value.trim();if(f.t==="number"){v=Math.max(0,Number(v)||0);if(f.k==="stock")v=Math.round(v);}if(f.req&&!v){toast("Falta completar: "+f.l,true);return;}o[f.k]=v;}
+  }
+  const b=$("#esave");b.disabled=true;
+  try{obj?await Db.upd(tabla,obj.id,o):await Db.add(tabla,o);$("#ed").close();toast("Guardado");await cargar();}
+  catch(e){toast(e.message,true);}
+  b.disabled=false;
+};
+$("#edel").onclick=async()=>{
+  const {tabla,obj}=ctx;if(!confirm("¿Eliminar definitivamente? Esto no se puede deshacer."))return;
+  try{await Db.del(tabla,obj.id);$("#ed").close();toast("Eliminado");await cargar();}catch(e){toast(e.message,true);}
+};
+
+/* ---------- Tienda ---------- */
+async function cargarTienda(){
+  try{const a=await Db.ajustes(),f=$("#tf");for(const k of["negocio","lema","whatsapp","instagram"])f[k].value=a[k]||"";}
+  catch(e){toast("Falta crear la tabla ajustes (ver setup.sql)",true);}
+}
+$("#tf").addEventListener("submit",async e=>{
+  e.preventDefault();const f=e.target,b=$("#tbtn");
+  const ig=f.instagram.value.trim().replace(/\/+$/,"").split("/").pop().replace(/^@/,"").split("?")[0];
+  b.disabled=true;
+  try{await Db.setAjustes({negocio:f.negocio.value.trim(),lema:f.lema.value.trim(),whatsapp:f.whatsapp.value.replace(/\D/g,""),instagram:ig});f.instagram.value=ig;toast("Guardado. El catálogo se actualiza solo");}
+  catch(err){toast(err.message,true);}
+  b.disabled=false;
+});
+
+/* ---------- Pestañas e ingreso ---------- */
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  for(const t of["productos","novedades","tienda"])$("#v-"+t).hidden=t!==b.dataset.tab;
+  if(b.dataset.tab==="tienda")cargarTienda();
+});
+async function entrar(email,pass,rec,silencioso){
+  $("#lerr").textContent="";$("#lbtn").disabled=true;
+  try{
+    if(silencioso){ses=leerSes();await jwt();}
+    else if(demo){if(pass!=="demo")throw new Error("En modo demo la contraseña es: demo");}
+    else guardarSes(await tokenReq({email,password:pass},"password"),rec);
+    $("#login").hidden=true;$("#app").hidden=false;$("#salir").hidden=false;await cargar();
+  }catch(err){
+    $("#login").hidden=false;$("#app").hidden=true;$("#salir").hidden=true;
+    if(!silencioso)$("#lerr").textContent=err.message||"No se pudo ingresar";
+  }
+  $("#lbtn").disabled=false;
+}
+$("#lf").addEventListener("submit",e=>{e.preventDefault();entrar($("#email").value.trim(),$("#pass").value,$("#rec").checked,false);});
+$("#salir").onclick=()=>{guardarSes(null);location.reload();};
+$("#demohint").hidden=!demo;
+if(!demo&&leerSes())entrar("","",false,true);
+</script>
+</body>
+</html>
